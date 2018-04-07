@@ -29,7 +29,7 @@ const routeSchema = new mongoose.Schema({
        type: String  
    }],
    end: [{
-       type:String
+       type: String
    }]
 
 });

@@ -8,6 +8,32 @@ module.exports.list = (req, res, next) => {
     .catch(error => next(error));
 }
 
+module.exports.listByLocation = (req, res, next) => {
+    console.log("ASDF");
+    const googleMapsClient = require('@google/maps').createClient({
+        key: process.env.GOOGLE_MAPS,
+        Promise: Promise
+      });
+
+    Route.find()
+    .then(routes => {
+        googleMapsClient.geocode({address: '1600 Amphitheatre Parkway, Mountain View, CA'})
+        .asPromise()
+        .then((response) => {
+          console.log(response.json.results);
+          res.json(response)
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    })
+    .catch(error => next(error));
+    
+      
+      
+
+  }
+
 module.exports.get = (req, res, next) => {
   const id = req.params.id;
   Route.findById(id)

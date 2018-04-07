@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Nick is required']
   },
   about: {
-
+    type: String
   },
   name: {
     type: String

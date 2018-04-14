@@ -5,7 +5,7 @@ const routesController = require('../controllers/routes.controller');
 const routesMiddleware = require('../middleware/routes.middleware');
 const secureMiddleware = require('../middleware/secure.middleware');
 
-router.get('/', secureMiddleware.isAuthenticated, routesController.list);
+router.get('/',  routesController.list);
 router.get('/location', routesController.listByLocation);
 router.get('/:id', secureMiddleware.isAuthenticated, routesMiddleware.checkValidId, routesController.get);
 router.post('/', secureMiddleware.isAuthenticated, routesController.create);

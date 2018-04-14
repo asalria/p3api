@@ -4,12 +4,13 @@ const ApiError = require('../models/api-error.model');
 
 module.exports.list = (req, res, next) => {
   Route.find()
-    .then(routes => res.json(routes))
+    .then(routes => {
+      res.json(routes)
+    })
     .catch(error => next(error));
 }
 
 module.exports.listByLocation = (req, res, next) => {
-    console.log("ASDF");
     const googleMapsClient = require('@google/maps').createClient({
         key: process.env.GOOGLE_MAPS,
         Promise: Promise
@@ -53,6 +54,7 @@ module.exports.create = (req, res, next) => {
     route.image = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
   }
   */
+ console.log(route);
   route.save()
     .then(() => {
       res.status(201).json(route);

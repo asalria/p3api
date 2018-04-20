@@ -1,10 +1,29 @@
 const mongoose = require('mongoose');
+const moment = require('moment');
 const Message = require('../models/message.model');
+const User = require('../models/user.model');
+const Route = require('../models/route.model');
 const ApiError = require('../models/api-error.model');
 
 module.exports.list = (req, res, next) => {
-  Message.find()
-    .then(messages => res.json(messages))
+  const query = {$or:[{sender: req.user.id},{receiver: req.user.id}]};
+  Message.find(query)
+      .populate('sender')
+      .populate('receiver')
+      .populate('route')
+      .then(messages => {
+        const formattedMessages = messages.map(message => (
+          {
+              id: message.id,
+              message: message.message,
+              sender: message.sender,
+              receiver: message.receiver,
+              route: message.route,
+              created: 	moment(message.created).format('LLL')
+          }
+      ));
+      res.json(formattedMessages);
+      })
     .catch(error => next(error));
 }
 
@@ -13,7 +32,17 @@ module.exports.get = (req, res, next) => {
   Message.findById(id)
     .then(message => {
       if (message) {
-        res.json(message)
+        const formattedMessages = messages.map(message => (
+          {
+              id: message.id,
+              message: message.message,
+              sender: message.sender,
+              receiver: message.receiver,
+              route: message.route,
+              created: 	moment(message.created).format('LLL')
+          }
+      ));
+      res.json(formattedMessages);
       } else {
         next(new ApiError(`Message not found`, 404));
       }

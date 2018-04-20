@@ -1,12 +1,16 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
+const favicon = require('serve-favicon');
+const moment = require('moment');
 const logger = require('morgan');
+const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const cors = require('cors');
-const session = require('express-session');
-const passport = require('passport');
 const mongoose = require('mongoose');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
+const passport = require('passport');
+const cors = require('cors');
 const corsConfig = require('./configs/cors.config');
 
 require('./configs/db.config');
@@ -23,22 +27,27 @@ app.use(cors(corsConfig))
 
 app.use(logger('dev'));
 
+app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(cookieParser());
 app.use(session({
-  secret: process.env.COOKIE_SECRET || 'Super Secret',
-  resave: true,
+  secret: 'Super Secret',
+  resave: false,
   saveUninitialized: true,
   cookie: {
+    secure: false,
     httpOnly: true,
-    maxAge: 24*60*60*1000
-  }
+    maxAge: 60 * 60 * 24 * 1000
+  },
+  store: new MongoStore({
+    mongooseConnection: mongoose.connection,
+    ttl: 24 * 60 * 60
+  })
 }));
-
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
   res.locals.session = req.user || {};

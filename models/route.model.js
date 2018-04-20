@@ -58,6 +58,8 @@ const routeSchema = new mongoose.Schema({
     }
 });
 
+routeSchema.index({startPoint:"2dsphere"});
+
 routeSchema.pre('save', function save(next) {
     console.log(this.startPoint[0]);
     const route = this;

@@ -13,6 +13,13 @@ const messageSchema = new mongoose.Schema({
    message: {
        type: String,
        required: ['true','A description of the route is required']
+   },
+   route: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Route'
+   },
+   created: {
+       type: Date
    }
 },{
    timestamps: true

@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const ApiError = require('../models/api-error.model');
+const Route = require('../models/route.model');
+
 
 module.exports.isAuthenticated = (req, res, next) => {
     console.log(req.isAuthenticated());
@@ -11,8 +13,8 @@ module.exports.isAuthenticated = (req, res, next) => {
 };
 
 module.exports.isAuthor = (req, res, next) => {
-    Recipe.findById(req.params.id).then((recipe) => {
-        if( recipe.author.equals(req.user._id) ){
+    Route.findById(req.params.id).then((route) => {
+        if( route.owner.id.equals(req.user._id) ){
             next();
         } else {
             next(new ApiError('Forbidden', 403));

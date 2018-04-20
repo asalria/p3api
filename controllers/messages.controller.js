@@ -11,6 +11,7 @@ module.exports.list = (req, res, next) => {
       .populate('sender')
       .populate('receiver')
       .populate('route')
+      .sort({'created': -1})
       .then(messages => {
         const formattedMessages = messages.map(message => (
           {

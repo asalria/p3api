@@ -11,6 +11,17 @@ module.exports.list = (req, res, next) => {
     .catch(error => next(error));
 }
 
+module.exports.listByUser = (req, res, next) => {
+  Route.find()
+    .then(routes => {
+      console.log(req.params.id);
+      const ownerRoutes = routes.filter(route => ( route.owner.id == req.params.id));
+      console.log(ownerRoutes);
+    res.json(ownerRoutes);
+    })
+    .catch(error => next(error));
+}
+
 module.exports.listByLocation = (req, res, next) => {
     const googleMapsClient = require('@google/maps').createClient({
         key: process.env.GOOGLE_MAPS,
@@ -19,7 +30,7 @@ module.exports.listByLocation = (req, res, next) => {
       var limit = req.query.limit || 10;
 
       // get the max distance or set it to 8 kilometers
-      var maxDistance = req.query.distance || 8;
+      var maxDistance = req.query.distance || 80;
   
       // we need to convert the distance to radians
       // the raduis of Earth is approximately 6371 kilometers
@@ -30,7 +41,6 @@ module.exports.listByLocation = (req, res, next) => {
         googleMapsClient.geocode({address: req.params.search})
         .asPromise()
         .then((response) => {
-          console.log(response.json.results[0]);
           var coords = [];
          coords[0] = response.json.results[0].geometry.location.lat;
         coords[1] = response.json.results[0].geometry.location.lng;
@@ -39,14 +49,14 @@ module.exports.listByLocation = (req, res, next) => {
               $geometry:{ 
                   type: "Point", 
                   coordinates: coords
-              }
+              },
+              $maxDistance : 2000
           }
       }}).limit(limit).exec(function(err, locations) {
         if (err) {
           console.log(err);
             return res.json(500, err);
         }
-        console.log(locations);
         res.json(200, locations);
     });
         })
@@ -60,33 +70,12 @@ module.exports.listByLocation = (req, res, next) => {
 
 module.exports.get = (req, res, next) => {
   const id = req.params.id;
+  console.log(id);
   Route.findById(id)
+    .populate('owner')
     .then(route => {
       if (route) {
-        User.findById(route.owner)
-    .then(user => {
-      if (user) {
-       route['owner'] = user.nick;
-        console.log(route['owner']);
-        route2 = {
-          title : route['title'],
-          owner : route['owner'],
-          description : route['description'],
-          duration : route['duration'],
-          price : route['price'],
-          img : route['img'],
-          transport: route['transport'],
-          rating: route['rating'],
-          startPoint: route['startPoint'],
-          endPoint: route['endPoint'],
-          ownername: user.nick
-        }
-        res.json(route2);
-      } else {
-        next(new ApiError(`User not found`, 404));
-      }
-    }).catch(error => next(error));
-       
+        res.json(route);
       } else {
         next(new ApiError(`Route not found`, 404));
       }
@@ -137,6 +126,7 @@ module.exports.edit = (req, res, next) => {
       if (route) {
         res.json(route)
       } else {
+        console.log(err);
         next(new ApiError(`Route not found`, 404));
       }
     }).catch(error => {

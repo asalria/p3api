@@ -6,8 +6,9 @@ const routesMiddleware = require('../middleware/routes.middleware');
 const secureMiddleware = require('../middleware/secure.middleware');
 
 router.get('/',  routesController.list);
+router.get('/user/:id', routesController.listByUser);
 router.get('/location/:search', routesController.listByLocation);
-router.get('/:id', routesMiddleware.checkValidId, routesController.get);
+router.get('/:id', routesController.get);
 router.post('/', secureMiddleware.isAuthenticated, routesController.create);
 router.put('/:id', secureMiddleware.isAuthenticated, secureMiddleware.isAuthor, routesController.edit);
 router.delete('/:id', secureMiddleware.isAuthenticated, secureMiddleware.isAuthor, routesController.delete);

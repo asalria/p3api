@@ -51,19 +51,20 @@ module.exports.create = (req, res, next) => {
 }
 
 module.exports.edit = (req, res, next) => {
-
+ // console.log(req.params.id);
   if (!req.body.password) {
     delete req.body.password;
-    console.log(req.body);
+    
   }
- 
-  User.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
+//console.log(req.body);
+  User.findByIdAndUpdate(req.params.id, {$set: req.body})
     .then(user => {
       if (!user) {
         next(new ApiError('User does not exist', 400));
       } else {
-            console.log(user);
             res.json(user);
       }
-    }).catch(error => next(new ApiError('User does not exist', 500)));
+    }).catch(error => {
+       console.log(error);
+        next(new ApiError('User does not exist', 500))});
 }

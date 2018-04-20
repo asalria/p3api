@@ -76,7 +76,25 @@ userSchema.pre('save', function save(next) {
     })
     .catch(err => next(err));
 });
+/*
+userSchema.pre('findOneAndUpdate', function save(next) {
+  const user = this;
+  if (!user.isModified('password')) {
+    return next();
+  }
 
+  bcrypt.genSalt(SALT_WORK_FACTOR)
+    .then(salt => {
+      bcrypt.hash(user.password, salt)
+        .then(hash => {
+          user.password = hash;
+          return next();
+        })
+        .catch(err => next(err));
+    })
+    .catch(err => next(err));
+});
+*/
 userSchema.methods.checkPassword = function (password) {
   return bcrypt.compare(password, this.password);
 }

@@ -3,7 +3,8 @@
 const originsAllowed = process.env.CORS_ORIGINS || [
     'http://localhost:3000',
     'http://localhost:4200',
-    'https://asalria.github.io/p3-web'
+    'https://asalria.github.io/p3-web',
+    'https://asalria.github.io'
 ];
 
 module.exports = {

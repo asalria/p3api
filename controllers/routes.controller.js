@@ -14,7 +14,7 @@ module.exports.list = (req, res, next) => {
 module.exports.listByUser = (req, res, next) => {
   Route.find()
     .then(routes => {
-      console.log(route.owner);
+      console.log(routes.owner);
       const ownerRoutes = routes.filter(route => ( route.owner._id == req.params.id));
       console.log(ownerRoutes);
     res.json(ownerRoutes);

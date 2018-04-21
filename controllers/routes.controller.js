@@ -83,7 +83,21 @@ module.exports.get = (req, res, next) => {
 }
 
 module.exports.create = (req, res, next) => {
-  const route = new Route(req.body);
+  const routeAux = {
+    title: req.body.title,
+    owner: req.body.owner.id,
+    description: req.body.description,
+    duration: req.body.duration,
+    startPoint: req.body.startPoint,
+    endPoint: req.body.endPoint,
+    price: req.body.price,
+    transport: req.body.transport,
+    img: req.body.img,
+    rating: req.body.rating
+
+  }
+  const route = new Route(routeAux);
+
   /*
   if (req.file) {
     route.image = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;

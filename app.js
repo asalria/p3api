@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+var mime = require('mime-types');
 const path = require('path');
 const favicon = require('serve-favicon');
 const moment = require('moment');

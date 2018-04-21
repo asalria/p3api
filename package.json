@@ -19,6 +19,7 @@
     "ejs": "~2.5.7",
     "express": "~4.15.5",
     "express-session": "^1.15.6",
+    "mime-types": "^2.1.18",
     "moment": "^2.22.1",
     "mongo-store": "0.0.2",
     "mongoose": "^5.0.11",

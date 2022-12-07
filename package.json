@@ -17,7 +17,7 @@
     "debug": "~2.6.9",
     "dotenv": "^5.0.1",
     "ejs": "~2.5.7",
-    "express": "~4.15.5",
+    "express": "~4.17.3",
     "express-session": "^1.15.6",
     "mime-types": "^2.1.18",
     "moment": "^2.22.1",
